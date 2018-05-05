@@ -1,21 +1,30 @@
 import fresh_tomatoes
 import media
+import urllib
+import json
+import connect
 
-toy_story = media.Movie("Toy Story",
-                        "A story of a boy and his toys that come to life",
-                        "https://upload.wikimedia.org/wikipedia/pt/d/dc/Movie_poster_toy_story.jpg",
-                        "https://youtu.be/rNk1Wi8SvNc")
 
-avatar = media.Movie("Avatar",
-                     "A story of a marine with love with some aliens",
-                     "https://upload.wikimedia.org/wikipedia/pt/b/b0/Avatar-Teaser-Poster.jpg",
-                     "https://youtu.be/5PSNL1qE6VY")
+movies_list = []
 
-interestelar = media.Movie("Interestelar",
-                           "Story of a crazy astronaut",
-                           "https://upload.wikimedia.org/wikipedia/pt/3/3a/Interstellar_Filme.png",
-                           "https://youtu.be/BYUZhddDbdc")
+for item in connect.movie_query["items"]:
 
-movies = [toy_story, avatar, interestelar]
-fresh_tomatoes.open_movies_page(movies)
+    movie_title = item["title"]
 
+    movie_poster = "https://image.tmdb.org/t/p/w500{}".format(item["poster_path"])
+
+    trailer_api = "http://api.themoviedb.org/3/movie/{}/videos?api_key={}".format(str(item["id"]), connect.api_key)
+    trailer = urllib.urlopen(trailer_api)
+    trailer = json.loads(trailer.read())
+    movie_trailer = "https://youtu.be/{}".format(trailer["results"][0]["key"])
+
+    movie_overview = item["overview"]
+
+    item = media.Movie(movie_title,
+                       movie_overview,
+                       movie_poster,
+                       movie_trailer)
+
+    movies_list.append(item)
+
+fresh_tomatoes.open_movies_page(movies_list)

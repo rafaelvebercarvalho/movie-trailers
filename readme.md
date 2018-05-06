@@ -6,6 +6,10 @@ Projeto que gera um html usando código Python utilizando a API do themoviedb.or
 
 * Python 2
 
+# Como funciona
+
+O código é bastante simples, pegando a ID de uma lista publica do themoviedb é criado um HTML a partir de um código Python, com o nome do filme e seu trailer.
+
 # Executando o código
 
 Primeiro clone o repositório
